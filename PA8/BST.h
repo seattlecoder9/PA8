@@ -27,16 +27,19 @@ public:
 	//creates node and sends it to private insert function, which recursively inserts.
 	void insert(string newData, int newUnits);
 	void inOrder();
+	TransactionNode & findSmallest();
+	TransactionNode & findLargest();
 
 private:
 	Node * mpRoot;
 
 	//recursively inserts in correct position
-	Node *& insert(string newData, int newUnits, Node *&pCurNode);
+	void insert(Node *&, Node *&pCurNode);
 
 	//recursively deletes each node.
-	bool destroyTree(Node *mpNode);
+	//bool destroyTree(Node *mpNode);
 	void inOrder(Node *mpNode);//Print string and int
+
 
 
 };

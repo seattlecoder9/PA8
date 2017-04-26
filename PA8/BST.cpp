@@ -7,7 +7,7 @@ BST::BST()
 
 BST::~BST()
 {
-	destroyTree(mpRoot);
+	//destroyTree(mpRoot);
 }
 
 void BST::setmpRoot(Node * newRoot)
@@ -23,26 +23,70 @@ Node *& BST::getmpRoot()
 void BST::insert(string newData, int newUnits)
 {
 	Node *pNewNode = new TransactionNode(newUnits, newData);
-	insert(newData,newUnits, this->getmpRoot());
+	insert(pNewNode, this->getmpRoot());
 }
 
-Node *& BST::insert(string newData, int newUnits, Node *& pCurNode)
+void BST::inOrder()
 {
-	if (pCurNode == nullptr)
+	inOrder(this->mpRoot);
+}
+
+void BST::inOrder(Node *pTree) //Does this need to be a reference to a pointer?
+{
+	// 1. go left
+	// 2. process the node
+	// 3. go right
+	if (pTree != nullptr)
 	{
-		pCurNode = new TransactionNode(newUnits, newData);
+		inOrder(pTree->getmpLeft());
+		cout << "Item: " << pTree->getmData() << "      Units: " << static_cast<TransactionNode*>(pTree)->getmUnits() << endl;
+		inOrder(pTree->getmpRight());
+
 	}
-	else if (newData < pCurNode->getmData())
+}
+
+TransactionNode & BST::findSmallest()
+{
+	if (this->getmpRoot() == nullptr)
 	{
-		insert(newData, newUnits, pCurNode->getmpLeft());
+		return;
 	}
-	else if (newData > pCurNode->getmData())
+	TransactionNode * pTemp;
+
+	while (pTemp->getmpLeft())
 	{
-		insert(newData, newUnits, pCurNode->getmpRight());
+		pTemp = static_cast<TransactionNode*>(pTemp->getmpLeft());
+	}
+	return *pTemp;
+}
+
+TransactionNode & BST::findLargest()
+{
+	if (this->getmpRoot() == nullptr)
+	{
+		return;
+	}
+	TransactionNode * pTemp;
+
+	while (pTemp->getmpRight())
+	{
+		pTemp = static_cast<TransactionNode*>(pTemp->getmpRight());
+	}
+	return *pTemp;
+}
+
+void BST::insert(Node *& pNewNode, Node *& pCurNode)
+{
+	if (static_cast<TransactionNode*>(pNewNode)->getmUnits() < static_cast<TransactionNode*>(pCurNode)->getmUnits())
+	{
+		insert(pNewNode, pCurNode->getmpLeft());
+	}
+	else if (static_cast<TransactionNode*>(pNewNode)->getmUnits() > static_cast<TransactionNode*>(pCurNode)->getmUnits())
+	{
+		insert(pNewNode, pCurNode->getmpRight());
 	}
 	else
 	{
 		cout << "Duplicate" << endl;
 	}
-	// TODO: insert return statement here
 }
